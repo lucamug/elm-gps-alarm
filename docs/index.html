@@ -175,48 +175,61 @@
             "time": 1540721981500
         }];
 
-        var length = data.length;
-
-        var calculated = {
-            maxX: data[0].lat,
-            minX: data[0].lat,
-            maxY: data[0].lng,
-            minY: data[0].lng,
-        };
-        console.log(calculated);
-
-        for (i = 0; i < length; i++) {
-            if (calculated.maxX < data[i].lat) {
-                calculated.maxX = data[i].lat;
-            }
-            if (calculated.minX > data[i].lat) {
-                calculated.minX = data[i].lat;
-            }
-            if (calculated.maxY < data[i].lng) {
-                calculated.maxY = data[i].lng;
-            }
-            if (calculated.minY > data[i].lng) {
-                calculated.minY = data[i].lng;
-            }
+        if (data.length > 1) {
+            updateSvg(data);
         }
-        calculated.deltaX = calculated.maxX - calculated.minX;
-        calculated.deltaY = calculated.maxY - calculated.minY;
-        calculated.maxDelta = 320 / (calculated.deltaX > calculated.deltaY ? calculated.deltaX : calculated.deltaY);
-        console.log("maxDelta", calculated);
 
-        var svg = '<svg viewBox="0 0 320 320">\n' +
-            data.map(function(point, index) {
-                var color = ((index / length) * 256);
-                var size = (((index / length) * 3) + 2);
-                var alpha = (((index / length) * 0.7) + 0.3);
-                console.log(alpha);
-                var p = transformPoint(point, calculated);
-                var svg = '<circle cx="' + p.x + '" cy="' + p.y + '" r="' + size + '" fill="rgba(76, 175, ' + color + ', ' + alpha + ')" />';
-                return svg;
-            }).join("\n") +
-            '</svg>';
-        console.log("xxx", svg);
-        document.getElementById("svg").innerHTML = svg;
+        function updateSvg(data) {
+            var length = data.length;
+            var calculated = {
+                maxX: data[0].lat,
+                minX: data[0].lat,
+                maxY: data[0].lng,
+                minY: data[0].lng,
+            };
+            console.log(calculated);
+
+            for (i = 0; i < length; i++) {
+                if (calculated.maxX < data[i].lat) {
+                    calculated.maxX = data[i].lat;
+                }
+                if (calculated.minX > data[i].lat) {
+                    calculated.minX = data[i].lat;
+                }
+                if (calculated.maxY < data[i].lng) {
+                    calculated.maxY = data[i].lng;
+                }
+                if (calculated.minY > data[i].lng) {
+                    calculated.minY = data[i].lng;
+                }
+            }
+            calculated.deltaX = calculated.maxX - calculated.minX;
+            calculated.deltaY = calculated.maxY - calculated.minY;
+            calculated.maxDelta = 320 / (calculated.deltaX > calculated.deltaY ? calculated.deltaX : calculated.deltaY);
+            console.log("maxDelta", calculated);
+
+            var svg = '<svg viewBox="0 0 320 320">\n' +
+                data.map(function(point, index) {
+                    var color = ((index / length) * 256);
+                    var size = (((index / length) * 3) + 2);
+                    var alpha = (((index / length) * 0.7) + 0.3);
+                    console.log(alpha);
+                    var p = transformPoint(point, calculated);
+                    var svg = '<circle cx="' + p.x + '" cy="' + p.y + '" r="' + size + '" fill="rgba(76, 175, ' + color + ', ' + alpha + ')" />';
+                    if (index > 0) {
+                        var previousPoint = transformPoint(data[index - 1], calculated);
+                        svg = '<path d="M' +
+                            previousPoint.x +
+                            ' ' +
+                            previousPoint.y +
+                            ' ' + p.x + ' ' + p.y + '" stroke-width="1" stroke="rgba(0,0,0,0.1)"/>\n' +
+                            svg;
+                    }
+                    return svg;
+                }).join("\n") +
+                '</svg>';
+            document.getElementById("svg").innerHTML = svg;
+        }
 
         function transformPoint(point, calculated) {
             return {
@@ -256,6 +269,9 @@
                     time: time
                 };
                 positions.push(item);
+                if (positions.length > 1) {
+                    updateSvg(positions);
+                }
                 x.innerHTML = positions.map(function(item) {
                     return showPosition(item);
                 }).join("\n\n") + "\n\n" + JSON.stringify(positions, null, "\t");
