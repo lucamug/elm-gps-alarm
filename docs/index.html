@@ -52,13 +52,19 @@
         }
 
         if (navigator.geolocation) {
-            console.log("navigator.geolocation exists");
+            console.log("navigator.geolocation existsss");
             navigator.geolocation.watchPosition(function(position, error) {
-                console.log("xxx", position, error);
-                positions.push(position);
-                x.innerHTML = positions.map(function(position) {
-                    return showPosition(position);
-                }).join("\n\n");
+                time = (new Date()).getTime();
+                console.log("xxx", time);
+                item = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                    time: time
+                };
+                positions.push(item);
+                x.innerHTML = positions.map(function(item) {
+                    return showPosition(item);
+                }).join("\n\n") + "\n\n" + JSON.stringify(positions, null, "\t");
 
             })
         } else {
@@ -67,7 +73,9 @@
 
 
         function showPosition(position) {
-            return "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude;
+            return "Latitude: " + position.lat +
+                "<br>Longitude: " + position.lng +
+                "<br>Time: " + position.time;
         }
 
         function showMap(position) {
