@@ -21,6 +21,7 @@
 
     <button onclick="vibrate()">Vibrate</button>
     <button onclick="playSound()">Play Sound</button>
+    <button onclick="delay()">Vibrate and Play in 5 secs</button>
 
     <pre id="demo"></pre>
 
@@ -37,6 +38,13 @@
 
         function playSound() {
             audio.play();
+        }
+
+        function delay() {
+            setTimeout(function() {
+                audio.play();
+                window.navigator.vibrate([200]);
+            }, 5000);
         }
 
         function vibrate() {
