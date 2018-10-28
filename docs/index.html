@@ -17,6 +17,9 @@
 </head>
 
 <body>
+
+    <div id="svg" style="max-width: 600px"></div>
+
     <p>Click the button to get your coordinates.</p>
 
     <button onclick="vibrate()">Vibrate</button>
@@ -25,14 +28,205 @@
 
     <pre id="demo"></pre>
 
-    <iframe frameborder="0" src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d810.7150395348118!2d139.7!3d35.6311738170428!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sjp!4v1540691800885"></iframe>
+    <!-- <iframe frameborder="0" src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d810.7150395348118!2d139.7!3d35.6311738170428!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sjp!4v1540691800885"></iframe>
     <iframe frameborder="0" src="https://www.openstreetmap.org/export/embed.html?bbox=139,35,140,36" style="border: 1px solid black"></iframe>
-
+    -->
 
     <script>
+        var data = [{
+            "lat": 35.6313003,
+            "lng": 139.704006,
+            "time": 1540708121252
+        }, {
+            "lat": 35.6313003,
+            "lng": 139.704006,
+            "time": 1540708121266
+        }, {
+            "lat": 35.6313003,
+            "lng": 139.704006,
+            "time": 1540708126179
+        }, {
+            "lat": 35.6313253,
+            "lng": 139.7039453,
+            "time": 1540708134014
+        }, {
+            "lat": 35.6313253,
+            "lng": 139.7039453,
+            "time": 1540708139016
+        }, {
+            "lat": 35.6313253,
+            "lng": 139.7039453,
+            "time": 1540708144023
+        }, {
+            "lat": 35.631279,
+            "lng": 139.7039905,
+            "time": 1540708439953
+        }, {
+            "lat": 35.6301356,
+            "lng": 139.7055668,
+            "time": 1540708441527
+        }, {
+            "lat": 35.6300883,
+            "lng": 139.7056336,
+            "time": 1540708451993
+        }, {
+            "lat": 35.6300731,
+            "lng": 139.7056683,
+            "time": 1540708462398
+        }, {
+            "lat": 35.6300731,
+            "lng": 139.7056683,
+            "time": 1540708467410
+        }, {
+            "lat": 35.6300731,
+            "lng": 139.7056683,
+            "time": 1540708472413
+        }, {
+            "lat": 35.6298658,
+            "lng": 139.705772,
+            "time": 1540708494946
+        }, {
+            "lat": 35.6298658,
+            "lng": 139.705772,
+            "time": 1540708495116
+        }, {
+            "lat": 35.6275351,
+            "lng": 139.7078029,
+            "time": 1540713558601
+        }, {
+            "lat": 35.6276137,
+            "lng": 139.7077051,
+            "time": 1540713558634
+        }, {
+            "lat": 35.6277383,
+            "lng": 139.7067277,
+            "time": 1540713558780
+        }, {
+            "lat": 35.6277383,
+            "lng": 139.7067277,
+            "time": 1540713560961
+        }, {
+            "lat": 35.6277625,
+            "lng": 139.7066798,
+            "time": 1540713562904
+        }, {
+            "lat": 35.6277625,
+            "lng": 139.7066798,
+            "time": 1540713623887
+        }, {
+            "lat": 35.6277152,
+            "lng": 139.706038,
+            "time": 1540713624023
+        }, {
+            "lat": 35.6278112,
+            "lng": 139.7054885,
+            "time": 1540714000020
+        }, {
+            "lat": 35.6278112,
+            "lng": 139.7054885,
+            "time": 1540714000042
+        }, {
+            "lat": 35.6301309,
+            "lng": 139.7042658,
+            "time": 1540714008459
+        }, {
+            "lat": 35.6301599,
+            "lng": 139.7042443,
+            "time": 1540714018569
+        }, {
+            "lat": 35.6302053,
+            "lng": 139.7042005,
+            "time": 1540714028703
+        }, {
+            "lat": 35.6302053,
+            "lng": 139.7042005,
+            "time": 1540714033735
+        }, {
+            "lat": 35.6302901,
+            "lng": 139.7041294,
+            "time": 1540714039445
+        }, {
+            "lat": 35.6303701,
+            "lng": 139.7039942,
+            "time": 1540714050856
+        }, {
+            "lat": 35.6304653,
+            "lng": 139.7039792,
+            "time": 1540714062773
+        }, {
+            "lat": 35.6304653,
+            "lng": 139.7039792,
+            "time": 1540714067803
+        }, {
+            "lat": 35.6307285,
+            "lng": 139.7037635,
+            "time": 1540714080272
+        }, {
+            "lat": 35.6308202,
+            "lng": 139.703713,
+            "time": 1540714084754
+        }, {
+            "lat": 35.630914,
+            "lng": 139.7040634,
+            "time": 1540721979412
+        }, {
+            "lat": 35.6304882,
+            "lng": 139.7038821,
+            "time": 1540721981500
+        }];
+
+        var length = data.length;
+
+        var calculated = {
+            maxX: data[0].lat,
+            minX: data[0].lat,
+            maxY: data[0].lng,
+            minY: data[0].lng,
+        };
+        console.log(calculated);
+
+        for (i = 0; i < length; i++) {
+            if (calculated.maxX < data[i].lat) {
+                calculated.maxX = data[i].lat;
+            }
+            if (calculated.minX > data[i].lat) {
+                calculated.minX = data[i].lat;
+            }
+            if (calculated.maxY < data[i].lng) {
+                calculated.maxY = data[i].lng;
+            }
+            if (calculated.minY > data[i].lng) {
+                calculated.minY = data[i].lng;
+            }
+        }
+        calculated.deltaX = calculated.maxX - calculated.minX;
+        calculated.deltaY = calculated.maxY - calculated.minY;
+        calculated.maxDelta = 320 / (calculated.deltaX > calculated.deltaY ? calculated.deltaX : calculated.deltaY);
+        console.log("maxDelta", calculated);
+
+        var svg = '<svg viewBox="0 0 320 320">\n' +
+            data.map(function(point, index) {
+                var color = ((index / length) * 256);
+                var size = (((index / length) * 3) + 2);
+                var alpha = (((index / length) * 0.7) + 0.3);
+                console.log(alpha);
+                var p = transformPoint(point, calculated);
+                var svg = '<circle cx="' + p.x + '" cy="' + p.y + '" r="' + size + '" fill="rgba(76, 175, ' + color + ', ' + alpha + ')" />';
+                return svg;
+            }).join("\n") +
+            '</svg>';
+        console.log("xxx", svg);
+        document.getElementById("svg").innerHTML = svg;
+
+        function transformPoint(point, calculated) {
+            return {
+                x: (point.lat - calculated.minX) * calculated.maxDelta,
+                y: (point.lng - calculated.minY) * calculated.maxDelta
+            };
+        }
+
         var x = document.getElementById("demo");
         var positions = [];
-
 
         var audio = new Audio('sound.mp3');
 
